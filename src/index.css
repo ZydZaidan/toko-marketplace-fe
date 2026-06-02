@@ -1,1 +1,52 @@
+/* src/index.css */
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+@theme {
+  /* Setup Font */
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  /* Setup Warna Dark Mode dari referensi HTML lo */
+  --color-bg-main: #0f1117;
+  --color-bg-2: #161b25;
+  --color-bg-3: #1e2535;
+  --color-card: #1a2030;
+  
+  --color-border-1: #2a3348;
+  --color-border-2: #364056;
+  
+  --color-text-main: #e8eaf0;
+  --color-text-muted: #8b93a8;
+  --color-text-dim: #5a6278;
+  
+  --color-accent-main: #4f8ef7;
+  --color-accent-hover: #3d6fd4;
+  
+  --color-status-green: #34d399;
+  --color-status-green-bg: #0d2e22;
+  --color-status-amber: #f59e0b;
+  --color-status-amber-bg: #2a1f08;
+  --color-status-red: #f87171;
+  --color-status-red-bg: #2a1010;
+  --color-status-purple: #a78bfa;
+  
+  --color-brand-shopee: #ee4d2d;
+  --color-brand-tokopedia: #03AC0E;
+}
+
+/* Base styling biar defaultnya langsung ngikutin dark mode */
+body {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+}
+
+/* Custom Scrollbar biar elegan kayak di desain lo */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-border-2);
+  border-radius: 4px;
+}

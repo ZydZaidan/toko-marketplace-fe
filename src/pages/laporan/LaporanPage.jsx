@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 export const LaporanPage = () => {
   const [laporan, setLaporan] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [periode, setPeriode] = useState('bulanan'); // default bulanan
+  const [periode, setPeriode] = useState('bulanan');
 
   const fetchLaporan = useCallback(async () => {
     setIsLoading(true);
@@ -32,18 +32,21 @@ export const LaporanPage = () => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka || 0);
   };
 
-  if (isLoading) return <div className="p-10 text-center text-gray-500">Menghitung cuan...</div>;
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-full text-text-muted">Menghitung cuan...</div>;
+  }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Laporan Penjualan</h1>
+    <div className="flex flex-col gap-4 pb-8">
+      
+      {/* Header & Filter */}
+      <div className="bg-card border border-border-1 rounded-[14px] p-6 flex justify-between items-center">
+        <h1 className="text-[15px] font-bold text-text-main">Laporan Keuangan</h1>
         
-        {/* Filter Periode */}
         <select 
           value={periode} 
           onChange={(e) => setPeriode(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-2 bg-white text-sm"
+          className="bg-bg-3 border border-border-1 rounded-lg px-3 py-1.5 text-xs text-text-main focus:border-accent-main focus:outline-none transition-colors"
         >
           <option value="harian">Hari Ini</option>
           <option value="bulanan">Bulan Ini</option>
@@ -52,60 +55,87 @@ export const LaporanPage = () => {
       </div>
 
       {/* Grid Statistik Keuangan */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-          <div className="flex items-center gap-2 text-blue-600 mb-2">
-            <ShoppingBag size={20} /> <span className="font-semibold text-sm">Total Pesanan</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        {/* Total Pesanan */}
+        <div className="bg-card border border-border-1 rounded-[14px] p-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-[34px] h-[34px] rounded-lg flex items-center justify-center bg-accent-main/10 text-accent-main">
+              <ShoppingBag size={18} />
+            </div>
           </div>
-          <p className="text-2xl font-bold text-blue-900">{laporan?.total_pesanan} Transaksi</p>
+          <div className="text-[22px] font-bold text-text-main font-mono tracking-tight mt-2">
+            {laporan?.total_pesanan} <span className="text-sm text-text-muted font-sans">Trx</span>
+          </div>
+          <div className="text-[11px] text-text-muted mt-1">Total Pesanan</div>
         </div>
         
-        <div className="bg-green-50 p-4 rounded-lg border border-green-100">
-          <div className="flex items-center gap-2 text-green-600 mb-2">
-            <DollarSign size={20} /> <span className="font-semibold text-sm">Total Omzet</span>
+        {/* Total Omzet */}
+        <div className="bg-card border border-border-1 rounded-[14px] p-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-[34px] h-[34px] rounded-lg flex items-center justify-center bg-status-green/10 text-status-green">
+              <DollarSign size={18} />
+            </div>
           </div>
-          <p className="text-2xl font-bold text-green-900">{formatRupiah(laporan?.total_penjualan)}</p>
+          <div className="text-[22px] font-bold text-text-main font-mono tracking-tight mt-2">
+            {formatRupiah(laporan?.total_penjualan)}
+          </div>
+          <div className="text-[11px] text-text-muted mt-1">Total Omzet</div>
         </div>
 
-        <div className="bg-red-50 p-4 rounded-lg border border-red-100">
-          <div className="flex items-center gap-2 text-red-600 mb-2">
-            <Wallet size={20} /> <span className="font-semibold text-sm">Total Modal</span>
+        {/* Total Modal */}
+        <div className="bg-card border border-border-1 rounded-[14px] p-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-[34px] h-[34px] rounded-lg flex items-center justify-center bg-status-red/10 text-status-red">
+              <Wallet size={18} />
+            </div>
           </div>
-          <p className="text-2xl font-bold text-red-900">{formatRupiah(laporan?.total_modal)}</p>
+          <div className="text-[22px] font-bold text-text-main font-mono tracking-tight mt-2">
+            {formatRupiah(laporan?.total_modal)}
+          </div>
+          <div className="text-[11px] text-text-muted mt-1">Total Modal</div>
         </div>
 
-        <div className="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
-          <div className="flex items-center gap-2 text-emerald-600 mb-2">
-            <TrendingUp size={20} /> <span className="font-semibold text-sm">Keuntungan Bersih</span>
+        {/* Keuntungan Bersih */}
+        <div className="bg-card border border-border-1 rounded-[14px] p-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-[34px] h-[34px] rounded-lg flex items-center justify-center bg-status-purple/10 text-status-purple">
+              <TrendingUp size={18} />
+            </div>
           </div>
-          <p className="text-2xl font-bold text-emerald-900">{formatRupiah(laporan?.total_keuntungan)}</p>
+          <div className="text-[22px] font-bold text-text-main font-mono tracking-tight mt-2">
+            {formatRupiah(laporan?.total_keuntungan)}
+          </div>
+          <div className="text-[11px] text-text-muted mt-1">Keuntungan Bersih</div>
         </div>
       </div>
 
       {/* Tabel Produk Terlaris */}
-      <div>
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Produk Terlaris</h3>
-        <div className="overflow-x-auto border border-gray-200 rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+      <div className="bg-card border border-border-1 rounded-[14px] overflow-hidden flex flex-col mt-2">
+        <div className="px-6 py-4 border-b border-border-1">
+          <h3 className="text-[13px] font-bold text-text-main">Produk Terlaris</h3>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead className="bg-bg-3 border-b border-border-1">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Produk</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Terjual</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sumbangan Omzet</th>
+                <th className="text-[10px] font-semibold text-text-dim uppercase tracking-wider py-3 px-6">Nama Produk</th>
+                <th className="text-[10px] font-semibold text-text-dim uppercase tracking-wider py-3 px-6">Total Terjual</th>
+                <th className="text-[10px] font-semibold text-text-dim uppercase tracking-wider py-3 px-6">Sumbangan Omzet</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody>
               {laporan?.produk_terlaris?.map((item, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm font-medium">{item.nama_produk}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{item.total_terjual} pcs</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-green-600">{formatRupiah(item.total_omzet)}</td>
+                <tr key={index} className="hover:bg-white/5 transition-colors border-b border-border-1 last:border-0">
+                  <td className="px-6 py-3.5 text-xs font-medium text-text-main">{item.nama_produk}</td>
+                  <td className="px-6 py-3.5 text-xs text-text-muted font-mono">{item.total_terjual} pcs</td>
+                  <td className="px-6 py-3.5 text-xs font-semibold text-status-green font-mono">{formatRupiah(item.total_omzet)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
     </div>
   );
 };

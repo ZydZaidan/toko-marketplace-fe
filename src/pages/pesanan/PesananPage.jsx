@@ -10,7 +10,6 @@ export const PesananPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Tarik keluar fungsinya dan bungkus pake useCallback
   const fetchOrders = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -23,8 +22,6 @@ export const PesananPage = () => {
     }
   }, []);
 
-  // useEffect sekarang tinggal manggil fungsinya aja
-// useEffect sekarang dibungkus fungsi async biar linter nggak marah
   useEffect(() => {
     const loadData = async () => {
       await fetchOrders();
@@ -33,86 +30,65 @@ export const PesananPage = () => {
   }, [fetchOrders]);
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+    <div className="bg-card border border-border-1 rounded-[14px] p-6 flex flex-col min-h-full">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Manajemen Pesanan</h1>
+        <h1 className="text-[15px] font-bold text-text-main">Manajemen Pesanan</h1>
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 text-sm font-medium transition-colors"
+          className="bg-accent-main hover:bg-accent-hover text-white px-3.5 py-2 rounded-lg flex items-center gap-2 text-xs font-semibold transition-colors"
         >
-          <Plus size={16} /> Input Pesanan
+          <Plus size={14} /> Input Pesanan
         </button>
       </div>
 
-      <div className="overflow-x-auto border border-gray-200 rounded-lg">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="overflow-x-auto border border-border-1 rounded-[10px]">
+        <table className="w-full text-left border-collapse">
+          <thead className="bg-bg-3 border-b border-border-1">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                No. Pesanan
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Pembeli
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Marketplace
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Total
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Aksi
-              </th>
+              <th className="text-[10px] font-semibold text-text-dim uppercase tracking-wider py-3 px-4">No. Pesanan</th>
+              <th className="text-[10px] font-semibold text-text-dim uppercase tracking-wider py-3 px-4">Pembeli</th>
+              <th className="text-[10px] font-semibold text-text-dim uppercase tracking-wider py-3 px-4">Marketplace</th>
+              <th className="text-[10px] font-semibold text-text-dim uppercase tracking-wider py-3 px-4">Total</th>
+              <th className="text-[10px] font-semibold text-text-dim uppercase tracking-wider py-3 px-4">Status</th>
+              <th className="text-[10px] font-semibold text-text-dim uppercase tracking-wider py-3 px-4">Aksi</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody>
             {isLoading ? (
               <tr>
-                <td
-                  colSpan="6"
-                  className="px-6 py-8 text-center text-sm text-gray-500"
-                >
-                  Loading data...
-                </td>
+                <td colSpan="6" className="px-4 py-8 text-center text-xs text-text-muted">Loading data...</td>
               </tr>
             ) : orders.length === 0 ? (
               <tr>
-                <td
-                  colSpan="6"
-                  className="px-6 py-8 text-center text-sm text-gray-500"
-                >
-                  Belum ada pesanan.
-                </td>
+                <td colSpan="6" className="px-4 py-8 text-center text-xs text-text-muted">Belum ada pesanan.</td>
               </tr>
             ) : (
               orders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm font-mono font-medium text-blue-600">
+                <tr key={order.id} className="hover:bg-white/5 transition-colors border-b border-border-1 last:border-0">
+                  <td className="px-4 py-3 text-xs font-mono text-accent-main font-medium">
                     {order.nomorPesanan}
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium">
+                  <td className="px-4 py-3 text-xs font-medium text-text-main">
                     {order.namaPembeli}
                   </td>
-                  <td className="px-6 py-4 text-sm uppercase">
-                    {order.marketplace}
+                  <td className="px-4 py-3 text-[10px] font-bold">
+                    <span className={`px-2 py-0.5 rounded-md uppercase ${order.marketplace.toLowerCase() === 'shopee' ? 'bg-brand-shopee/10 text-brand-shopee' : order.marketplace.toLowerCase() === 'tokopedia' ? 'bg-brand-tokopedia/10 text-brand-tokopedia' : 'bg-bg-3 text-text-muted'}`}>
+                      {order.marketplace}
+                    </span>
                   </td>
-                  <td className="px-6 py-4 text-sm">
+                  <td className="px-4 py-3 text-xs font-semibold text-text-main">
                     {order.getTotalRupiah()}
                   </td>
-                  <td className="px-6 py-4 text-sm">
-                    <span
-                      className={`px-2 py-1 text-xs font-semibold rounded-full ${order.getStatusColor()}`}
-                    >
+                  <td className="px-4 py-3 text-xs">
+                    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold ${order.getStatusColor()}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${order.status === 'selesai' ? 'bg-status-green' : order.status === 'dikirim' ? 'bg-accent-main' : 'bg-status-amber'}`}></span>
                       {order.status.toUpperCase()}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium">
-                    <button className="text-gray-500 hover:text-blue-600 flex items-center gap-1">
-                      <Eye size={18} /> Detail
+                  <td className="px-4 py-3 text-xs font-medium">
+                    <button className="text-text-muted hover:text-accent-main flex items-center gap-1.5 transition-colors">
+                      <Eye size={16} /> Detail
                     </button>
                   </td>
                 </tr>
